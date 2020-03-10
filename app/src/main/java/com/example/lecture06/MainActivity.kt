@@ -29,7 +29,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        load_list_data()
+       try {
+           load_list_data()
+       }catch (ex : Exception){
+           Toast.makeText(this, "Exception ${ex.toString()}",
+                            Toast.LENGTH_SHORT).show()
+       }
         display_list_item()
         //click list item by using Click Listener
         list_clicked_function()
@@ -142,7 +147,8 @@ class MainActivity : AppCompatActivity() {
             Context.MODE_PRIVATE
         )
         val gson = Gson()
-        val received_json_list = sharedPreferences.getString("task_list", "")
+        val emptyList = gson.toJson(ArrayList<String>())
+        val received_json_list = sharedPreferences.getString("task_list", emptyList)
         val type_task_list = object : TypeToken<ArrayList<String>>() {
         }.type
         if (received_json_list != null) {
